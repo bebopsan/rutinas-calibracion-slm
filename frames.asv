@@ -1,0 +1,53 @@
+% 
+
+%% Camera initialization
+vid = videoinput('winvideo','2','RGB32_1280x1024'); % create video object
+
+% --- Default parameters ---
+vid_src = get(getselectedsource(vid));
+
+vid_src.BacklightCompensation = 'off'; % range: 'on''off'
+vid_src.BacklightCompensationMode = 'manual'; % range: 'auto' 'manual'
+vid_src.Brightness = 0;
+vid_src.BrightnessMode = 'manual'; %range: 'auto' 'manual'
+vid_src.Contrast = 53;
+vid_src.ContrastMode = 'manual';
+vid_src.Exposure = -3;
+vid_src.ExposureMode = 'manual';
+vid_src.Gain = 43;
+vid_src.GainMode = 'manual';
+vid_src.Gamma = 100; % range: 1 1000
+vid_src.HorizontalFlip = 'off';
+vid_src.Sharpness = 0;
+vid_src.VerticalFlip = 'off';
+% --------------------------
+
+preview(vid) %visualization
+
+%% capturing images
+
+for n = 1 : 10
+            aux = zeros(1024,1280);
+    for m = 1 : 30
+        capture = mat2gray(getsnapshot(vid));
+        capture = capture(:,:,1);
+        aux = capture + aux;
+    end
+%     capture = aux/10;
+    num = num2str(n);
+    nombre = strcat('Imagen_',num,'.bmp');
+    imwrite(mat2gray(capture),nombre)
+    
+    fprintf('\n Image %d captured \n',n)
+    fprintf('\n Press return to continue \n')
+    pause
+end
+
+
+
+
+
+
+
+
+    
