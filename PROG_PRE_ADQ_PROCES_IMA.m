@@ -1,3 +1,4 @@
+function PROG_PRE_ADQ_PROCES_IMA(seguir)
 %I)---------PRIMER PROGRAMA: Toma una imagen y la usa para el prepocesamiento antes de la toma de datos.
 
 
@@ -10,38 +11,30 @@ TMfil=960;
 TMcol=1280;
 
 %Inicializar la camara
-vid=videoinput('winvideo','1','Y800_1280x960');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
+vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
 set(vid,'ReturnedColorSpace','grayscale');
 
 %val_Brightness =255;
 %val_Contrast = 0;
-val_Gain = 34;
+%val_Gain = 34;
 %val_BacklightCompensation ='off';
-val_Exposure = -6;
-seguir=1;
+%val_Exposure = -6;
 
 src = getselectedsource(vid);
 % con  imaqhelp(src,'nombredelapropiedad') y/o propinfo(src,'nombredelapropiedad')  se pueden obtener los valores
 % posibles para determinada propiedad 
-
 %set(src,'BrightnessMode','manual');
 %set(src,'Brightness',val_Brightness);%
-
 %set(src,'ContrastMode','manual');
 %set(src,'Contrast',val_Contrast);%
-
-set(src,'GainMode','manual');
-set(src,'Gain',val_Gain);%
-
+%set(src,'GainMode','manual');
+%set(src,'Gain',val_Gain);%
 %set(src,'BacklightCompensationMode','manual');
 %set(src,'BacklightCompensation',val_BacklightCompensation);%
-
-set(src,'ExposureMode','manual');
-set(src,'Exposure',val_Exposure);%
-
+%set(src,'ExposureMode','manual');
+%set(src,'Exposure',val_Exposure);%
 %val_Gamma=100;
 %set(src,'Gamma',val_Gamma);%
-
 
 %Ajustar el video a una ventana de 800 x 600 pixeles 
 vidRes = get(vid, 'VideoResolution');
@@ -59,8 +52,8 @@ preview(vid,hImage);
 
 % 2)---Cambiar las propiedades de la cámara: cambie los valores y vuelva a correr esta cell del programa
 
-src = getselectedsource(vid); 
-get(src);%% muestra otras propiedades.
+%src = getselectedsource(vid); 
+%get(src);%% muestra otras propiedades.
 clc
 % %propinfo(src,'Exposure')
 
@@ -99,11 +92,11 @@ get(gcf);set(gcf,'units','pixels');clc;
 set(gcf,'position',[(TMcol-Tgca(1,1)-80) (TMfil-Tgca(1,2))/2 Tgca(1,1)+80 Tgca(1,2)+100]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
 get(gca);set(gca,'units','pixels');clc;
 set(gca,'position',[40 40 Tgca(1,1) Tgca(1,2)]);
-
+%seguir = 12;
 while seguir==1
     
     % Le puse la llamada a la función dentro del while
-    [seguir CamProperties]=cameraproperties(vid,val_Gain,val_Exposure);
+    %[seguir CamProperties]=cameraproperties(vid,val_Gain,val_Exposure);
         pause(1); % se tuvo que poner esta pausa por un problema de respuesta de las tarjetas
     F=getsnapshot(vid);drawnow
     %figure(2)=hist_mean_std_Visib_frame_adq(F);
@@ -246,3 +239,5 @@ end
 return
 
 %%%% falta incluir la parte de el radio del orden cero
+%exit
+end
