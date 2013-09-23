@@ -30,7 +30,7 @@ figure,
     tic% incia el contador de tiempo
 
     %-----Variables inciales globales
-    camino='C:\Users\franjas\Desktop\07 - CAMERA\';
+    camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
 %     TMfil=1024;
 %     TMcol=1280;
 
@@ -52,12 +52,12 @@ Pol=+14;
 Ana=+122;
 Lam4=60;
 %Modulador
-BrilloMod=90;
-ContrasteMod=180;
+%BrilloMod=90;
+%ContrasteMod=180;
 %Cámara
 % Brillo=255;
 % Contraste=0;
-Exposurenro=-7;
+%Exposurenro=-7;
     
     load ([camino,'coor_subima']);
     f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
@@ -65,8 +65,8 @@ Exposurenro=-7;
     %1)--------Activar la captura de video de nuevo
 
     %Inicializacion para que matlab vea la camara
-    vid=videoinput('winvideo','1','Y800_1280x960');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
-    set(vid,'ReturnedColorSpace','grayscale');
+    vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
+    %set(vid,'ReturnedColorSpace','grayscale');
 
     %Cambia brillo y contraste
     src = getselectedsource(vid);
@@ -79,14 +79,14 @@ Exposurenro=-7;
 %     set(src,'ContrastMode','manual');
 %     set(src,'Contrast',Contraste);%% Cambia el contraste.
 
-    set(src,'GainMode','manual');
-    set(src,'Gain',40);%% Cambia el brillo.
+    %set(src,'GainMode','manual');
+    %set(src,'Gain',40);%% Cambia el brillo.
 
 %     set(src,'BacklightCompensationMode','manual');
 %     set(src,'BacklightCompensation','off');%% Cambia el brillo.
 
-    set(src,'ExposureMode','manual');
-    set(src,'Exposure',Exposurenro);%% Cambia el brillo.
+    %set(src,'ExposureMode','manual');
+    %set(src,'Exposure',Exposurenro);%% Cambia el brillo.
 
     get(src)
 
@@ -135,7 +135,7 @@ Exposurenro=-7;
 
 
     vec_Int(:)= vec_Int(:)./max(vec_Int(:));
-text_T=strcat('Bm= ',num2str(BrilloMod),'  Cm= ',num2str(ContrasteMod),'  P= ',num2str(Pol), '  L4 ind= ',num2str(Lam4),'  A ind: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_T=strcat('');
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Amplitud Normalizada';
     
@@ -164,7 +164,7 @@ set(gca,'YTick',ylab);
     
     resultados=[ NivelGris vec_Int];
      save([camino,'resultados_Int'],'resultados');
-    dlmwrite('C:\Users\franjas\Desktop\07 - CAMERA\resultados_Int.dat',resultados,'delimiter','\t', 'precision', '%.6f');
+    dlmwrite('C:\Users\franjas\Documents\rutinas-calibracion-slm\resultados_Int.dat',resultados,'delimiter','\t', 'precision', '%.6f');
     fprintf('El proceso demoró %g minutos \n',toc/60)
     % close all
 

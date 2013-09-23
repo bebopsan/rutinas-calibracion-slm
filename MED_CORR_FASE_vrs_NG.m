@@ -33,10 +33,10 @@ Pol=+14;
 Ana=+122;
 Lam4=+60;
 %Modulador
-BrilloMod=90;
-ContrasteMod=180;
+%BrilloMod=90;
+%ContrasteMod=180;
 
-camino='C:\Users\franjas\Desktop\07 - CAMERA\';
+camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
 % TMfil=1024;
 % TMcol=1280;
 
@@ -47,7 +47,7 @@ tamH=1024;
 tamV=768;
 % Brillo=255;
 % Contraste=0;
- Exposurenro=-7;
+% Exposurenro=-7;
 
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
@@ -62,8 +62,8 @@ NivelGris=zeros(52,1);
 %1)--------Activar la captura de video de nuevo
 
 %Inicializacion para que matlab vea la camara
-vid=videoinput('winvideo','1','Y800_1280x960');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
-set(vid,'ReturnedColorSpace','grayscale');
+vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
+%set(vid,'ReturnedColorSpace','grayscale');
 
 %Cambia brillo y contraste
 src = getselectedsource(vid); 
@@ -76,14 +76,14 @@ clc
 % set(src,'ContrastMode','manual');
 % set(src,'Contrast',Contraste);%% Cambia el contraste.
 
-set(src,'GainMode','manual');
-set(src,'Gain',40);%% Cambia el brillo.
+%set(src,'GainMode','manual');
+%set(src,'Gain',40);%% Cambia el brillo.
 
 % set(src,'BacklightCompensationMode','manual');
 % set(src,'BacklightCompensation','off');%% Cambia el brillo.
 
-set(src,'ExposureMode','manual');
-set(src,'Exposure',Exposurenro);%% Cambia el brillo.
+%set(src,'ExposureMode','manual');
+%set(src,'Exposure',Exposurenro);%% Cambia el brillo.
 
 get(src)
 
@@ -211,7 +211,7 @@ Corr_fase2=Corr_fase0;
 % Corr_fase2=Corr_fase2-Corr_fase2(end);
 % Corr_fase=Corr_fase-Corr_fase(1,1);
 %vec_u=unwrap(vec_fase_rel(4,NG));
-text_T=strcat('Bm= ',num2str(BrilloMod),'  Cm= ',num2str(ContrasteMod),'  P= ',num2str(Pol), '  L4= ',num2str(Lam4),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_T=strcat('');
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Corrimiento de fase(rad [0 2*pi])';
 
@@ -265,7 +265,7 @@ set(gca,'YTick',ylab);
 
 resultados=[NivelGris fase_prom fase_err];
  save([camino,'resultados_fase'],'resultados');
-dlmwrite('C:\Users\franjas\Desktop\07 - CAMERA\resultados_fase.dat',resultados,'delimiter','\t', 'precision', '%.6f');
+dlmwrite('C:\Users\franjas\Documents\rutinas-calibracion-slm\resultados_fase.dat',resultados,'delimiter','\t', 'precision', '%.6f');
 fprintf('El proceso demoró %g minutos \n',toc/60)
 % close all
 return

@@ -1,9 +1,9 @@
-function PROG_PRE_ADQ_PROCES_IMA(seguir)
+
 %I)---------PRIMER PROGRAMA: Toma una imagen y la usa para el prepocesamiento antes de la toma de datos.
 
 
 %% 1)--------Visualizar el video a escala [800 600]
-
+seguir = 2;
 clear all
 % close all
 clc
@@ -84,7 +84,7 @@ figure(5);
 
 %  h=msgbox('X^2 + Y^2','Title','custom',Data,hot(64),CreateStruct);
 F=uint8(zeros(vidRes(2),vidRes(1)));
-seguir=1;
+%seguir=1;
 figure(4);
 Tgca=[300 300];TMfil=1024;TMcol=1280;
 % Tgca=[500 500];TMfil=960;TMcol=1280;
@@ -92,7 +92,7 @@ get(gcf);set(gcf,'units','pixels');clc;
 set(gcf,'position',[(TMcol-Tgca(1,1)-80) (TMfil-Tgca(1,2))/2 Tgca(1,1)+80 Tgca(1,2)+100]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
 get(gca);set(gca,'units','pixels');clc;
 set(gca,'position',[40 40 Tgca(1,1) Tgca(1,2)]);
-%seguir = 12;
+seguir = 2;
 while seguir==1
     
     % Le puse la llamada a la función dentro del while
@@ -118,8 +118,8 @@ while seguir==1
 end
 
 uiwait(msgbox('¿Desea guardar la imagen con el nombre especificado en name?','Guardar?'))
-
-camino='C:\Users\franjas\Desktop\07 - CAMERA\';
+F=getsnapshot(vid);drawnow
+camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
 name=strcat(camino,'prueba.bmp');
 imwrite(F,name);
 clear F
@@ -145,7 +145,7 @@ while (seguir==1)
     switch tipo
 
         case 'Seleccionar_subimagenes'
-            camino='C:\Users\franjas\Desktop\07 - CAMERA\';
+            camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
             name=strcat(camino,'prueba.bmp');
             imagen=imread(name);
             
@@ -169,7 +169,8 @@ while (seguir==1)
             IR=imagen(1:f2,c1:c2);
             IC=imagen(f3:end,c1:c2);
             f2=size(IR,1);
-            imagen=[IR;IC];clear IR IC sub_ima cor_rec
+            imagen=[IR;IC];
+            clear IR IC sub_ima cor_rec
             close all
             
             figure,Tgca=[size(imagen,2) size(imagen,1)];
@@ -178,7 +179,7 @@ while (seguir==1)
 
             get(gca);set(gca,'units','pixels');clc;
             set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-            [sub_ima,cor_rec] = imcrop(imagen);
+            %[sub_ima,cor_rec] = imcrop(imagen);
             imagesc(imagen);colormap gray;
             
             uiwait(msgbox('SELECCIONE UN PUNTO QUE INDIQUE LA POSICION DE LA PRIMERA FILA'));
@@ -205,7 +206,7 @@ while (seguir==1)
 
             get(gca);set(gca,'units','pixels');clc;
             set(gca,'position',[50 150 Tgca(1,1) Tgca(1,2)]);
-            [sub_ima,cor_rec] = imcrop(imagen);
+            %[sub_ima,cor_rec] = imcrop(imagen);
        
             imagesc(imagen);colormap gray;title('Imagen final para calcular el corrimieto de fase');
             hpop = uicontrol('Parent', f,'Style', 'popup', 'String', 'Reiniciar|Finalizar',...
@@ -222,7 +223,7 @@ while (seguir==1)
             elseif val==2
                 disp('Se terminará el proceso de selección, se guardan las coordenadas actuales y continua la ejecución')
                 close(f);
-                camino='C:\Users\franjas\Desktop\07 - CAMERA\';
+                camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
                 save([camino,'coor_subima'],'coorsubima');
 %                 save([camino,'coor_subima'],'coor_subima']);
                 seguir=0;
@@ -236,8 +237,5 @@ while (seguir==1)
     end
 end
 
-return
 
 %%%% falta incluir la parte de el radio del orden cero
-%exit
-end
