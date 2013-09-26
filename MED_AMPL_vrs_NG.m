@@ -2,9 +2,6 @@
 %-------------------------
 %%
 %---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
-% TMfil=1024;
-% TMcol=1280;
-
 TMcol = 1300;
 TMfil = 768;
 
@@ -15,15 +12,14 @@ figure,
     Tgca=[tamH tamV];
     get(gcf);set(gcf,'units','pixels');clc;
     set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
-
     get(gca);set(gca,'units','pixels');clc;
     set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
     recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=0; %elemento a proyectar
     imshow(recuadro,[0 255]);drawnow;colormap gray;
 %     uiwait(msgbox('Presione enter si quiere correr la adquisión con esta posición','Correr el programa de adquisición?'));
     close all;
-    %-------------------------
-    %%
+%-------------------------
+%%
     clear all
     clc
 
@@ -31,22 +27,14 @@ figure,
 
     %-----Variables inciales globales
     camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
-%     TMfil=1024;
-%     TMcol=1280;
 
-TMcol = 1920;
+    TMcol = 1920;
 TMfil = 1080;
 
 tamH=1024;
 tamV=768;
-
-% TMcol = 1920;
-% TMfil = 1080;
-%     tamH=800;
-%     tamV=700;
-    
-    vec_Int=zeros(52,1);
-    NivelGris=zeros(52,1);
+vec_Int=zeros(52,1);
+NivelGris=zeros(52,1);
 %Arqui Óptica
 Pol=+14;
 Ana=+122;
@@ -72,21 +60,6 @@ Lam4=60;
     src = getselectedsource(vid);
     get(src);%% muestra otras propiedades.
     clc
-
-%     set(src,'BrightnessMode','manual');
-%     set(src,'Brightness',Brillo);%% Cambia el brillo.
-% 
-%     set(src,'ContrastMode','manual');
-%     set(src,'Contrast',Contraste);%% Cambia el contraste.
-
-    %set(src,'GainMode','manual');
-    %set(src,'Gain',40);%% Cambia el brillo.
-
-%     set(src,'BacklightCompensationMode','manual');
-%     set(src,'BacklightCompensation','off');%% Cambia el brillo.
-
-    %set(src,'ExposureMode','manual');
-    %set(src,'Exposure',Exposurenro);%% Cambia el brillo.
 
     get(src)
 
