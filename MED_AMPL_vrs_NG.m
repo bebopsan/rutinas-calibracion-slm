@@ -10,9 +10,11 @@ tamV=700;
 
 figure,
     Tgca=[tamH tamV];
-    get(gcf);set(gcf,'units','pixels');clc;
+    %get(gcf);
+    set(gcf,'units','pixels');clc;
     set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
-    get(gca);set(gca,'units','pixels');clc;
+    %get(gca);
+    set(gca,'units','pixels');clc;
     set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
     recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=0; %elemento a proyectar
     imshow(recuadro,[0 255]);drawnow;colormap gray;
@@ -35,17 +37,17 @@ tamH=1024;
 tamV=768;
 vec_Int=zeros(52,1);
 NivelGris=zeros(52,1);
-%Arqui Óptica
-Pol=+14;
-Ana=+122;
-Lam4=60;
-%Modulador
-%BrilloMod=90;
-%ContrasteMod=180;
-%Cámara
-% Brillo=255;
-% Contraste=0;
-%Exposurenro=-7;
+% Carga de propiedades de la medida
+prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta labview
+    %Arqui Óptica
+    Pol = prop.data(1);
+    Ana = prop.data(4);
+    Lam4 = prop.data(2);
+    
+    %Cámara
+    Brillo = prop.data(6);
+    Contraste= prop.data(8);
+    Exposurenro=prop.data(5);
     
     load ([camino,'coor_subima']);
     f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
@@ -54,22 +56,20 @@ Lam4=60;
 
     %Inicializacion para que matlab vea la camara
     vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
-    %set(vid,'ReturnedColorSpace','grayscale');
-
+    
     %Cambia brillo y contraste
     src = getselectedsource(vid);
-    get(src);%% muestra otras propiedades.
+    %get(src);%% muestra otras propiedades.
     clc
-
-    get(src)
-
-
+ 
     figure;
     Tgca=[tamH tamV];
-    get(gcf);set(gcf,'units','pixels');clc;
+    %get(gcf);
+    set(gcf,'units','pixels');clc;
     set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]);
 
-    get(gca);set(gca,'units','pixels');clc;
+    %get(gca);
+    set(gca,'units','pixels');clc;
     set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
 
     vidRes = get(vid, 'VideoResolution');
@@ -104,11 +104,9 @@ Lam4=60;
 %         imwrite(F,name);
         clear F
     end
-
-
-
+    
     vec_Int(:)= vec_Int(:)./max(vec_Int(:));
-text_T=strcat('');
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  L4= ',num2str(Lam4),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Amplitud Normalizada';
     
@@ -125,7 +123,8 @@ ylab=ylab';
 grid on;axis on;
 title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');...
 xlabel(text_x,'FontSize',10);ylabel(text_y,'FontSize',10);
-get(gca);axis on;box on;
+%get(gca);
+axis on;box on;
 set(gca,'XLimMode','manual');
 set(gca,'XLim',[0 255]);
 set(gca,'XTick',xtic);
@@ -134,10 +133,13 @@ set(gca,'YLimMode','manual');
 set(gca,'YLim',[0 1]);
 set(gca,'YTick',ytic);
 set(gca,'YTick',ylab);  
-    
+    nombre_archivo = prop.textdata(9);
     resultados=[ NivelGris vec_Int];
-     save([camino,'resultados_Int'],'resultados');
-    dlmwrite('C:\Users\franjas\Documents\rutinas-calibracion-slm\resultados_Int.dat',resultados,'delimiter','\t', 'precision', '%.6f');
+    camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'...
+            ,nombre_archivo,'_amp'));      
+    save(camino, 'resultados');
+    saveas(gcf,camino, 'png')
+    dlmwrite(camino, resultados,'delimiter','\t', 'precision', '%.6f');
     fprintf('El proceso demoró %g minutos \n',toc/60)
     % close all
 

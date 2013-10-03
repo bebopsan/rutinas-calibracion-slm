@@ -1,2 +1,2 @@
-P    L    A      
--10  -68  -110   
+Pi	Li	Lo	Po	E	B	G	C	I1
+0	0	0	0	0	0	0	0	0
