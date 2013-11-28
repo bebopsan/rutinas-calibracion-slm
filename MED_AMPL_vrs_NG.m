@@ -78,7 +78,7 @@ prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta lab
     % F = uint8(zeros(vidRes(2),vidRes(1),nBands));
     cont=52;
 
-    for n=1:5:256
+    for n=1:5:256 % De aquí se cambia cuantos pasos deben correrse.
         NG=256-n;
         fprintf('Nivel de gris %g \n',NG)
         recuadro=ones(tamV,tamH); recuadro(:,:)=NG; %elemento a proyectar

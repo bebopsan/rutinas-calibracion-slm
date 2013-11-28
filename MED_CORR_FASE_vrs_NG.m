@@ -88,8 +88,8 @@ nBands = get(vid, 'NumberOfBands');
  h = fspecial('average',[9 9]);
 for rep=1:Nmed%:10
     
-    cont=52;
-for n=1:5:256
+    cont=256;
+for n=1:1:256 % De aquí se cambia cada cuanto se toman imágenes.
     NG=256-n;
     fprintf('Nivel de gris %g \n',NG)
     recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=NG; %elemento a proyectar
@@ -111,11 +111,20 @@ drawnow
     imaref=F(f1:f2,c1:c2);
     imaref=imfilter(mat2gray(imaref),h,'replicate');
     imaref=mat2gray(imaref);
-
+    imshow(imaref);
+    
+    imwrite( imaref, strcat( 'imaref_' , num2str(n) ,'.png'));
+    
+    %save('imaref' + num2str(n) , uint8(imaref) );
+    
     %se extrae la imagen de de corrimiento de fase
     imacorr=F(f3:f4,c1:c2);clear ima
     imacorr=imfilter(mat2gray(imacorr),h,'replicate');
     imacorr=mat2gray(imacorr);
+    imshow(imacorr);
+    imwrite( imacorr, strcat( 'imacorr_' , num2str(n) ,'.png'));
+    pause(1); 
+    %save('imacorr' + num2str(n) , imacorr )
     %imshow(imaref);axis on
 
  %------------------Imagen de referencia-------------------------
