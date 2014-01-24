@@ -1,0 +1,88 @@
+
+In [92]:
+
+
+import matplotlib as mpl
+from mpl_toolkits.mplot3d import Axes3D
+import numpy as np
+import matplotlib.pyplot as plt
+
+mpl.rcParams['legend.fontsize'] = 10
+
+fig = plt.figure()
+ax = fig.gca(projection='3d')
+theta = np.linspace(-4 * np.pi, 4 * np.pi, 100)
+phi = np.pi/4
+x = np.linspace(-2, 2, 100)
+r = 1
+z = r *0.923879532511287* np.cos(theta)
+y = r *0.38268343236509 *np.cos(theta + phi)
+ax.plot(x, y, z, label='parametric curve', zdir ='z')
+ax.view_init(elev=0, azim=0)
+ax.set_aspect('equal')
+ax.set_autoscale_on(False)
+ax.legend()
+
+plt.show()
+ 
+
+In [93]:
+fig2 = plt.figure()
+ax2d = fig2.gca(projection='3d')
+ax2d.plot(x, y, z, label='parametric curve', zdir ='x')
+ax2d.set_top_view()
+plt.show()
+ 
+
+In [94]:
+fig3 = plt.figure()
+ax3 = fig3.gca()
+
+ax3.plot(y, z)
+ax3.set_xlabel('X Label')
+ax3.set_ylabel('Y Label')
+ax3.set_aspect('equal')
+plt.show()
+ 
+
+In [95]:
+z =exp(1j*pi/2)
+
+In [96]:
+angle(z)
+Out [96]:
+1.5707963267948966
+
+In [97]:
+pi/2
+Out [97]:
+1.5707963267948966
+
+In [98]:
+theta = 
+a = sqrt((1+sqrt(1- sin(2*theta)**2*sin(phi)**2))/2)
+b = sqrt((1-sqrt(1- sin(2*theta)**2*sin(phi)**2))/2)
+
+In [99]:
+a
+Out [99]:
+0.96592582628906831
+
+In [82]:
+b
+Out [82]:
+0.38268343236508973
+
+In [91]:
+tan(tan(2*theta)*cos(phi))
+Out [91]:
+6.1232339957367648e-17
+
+In [90]:
+
+Out [90]:
+6.1232339957367648e-17
+
+In [ ]:
+
+
