@@ -34,8 +34,8 @@ prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta lab
     %Arqui Óptica
     Pol = prop.data(1);
     Ana = prop.data(4);
-    Lam4 = prop.data(2);
-    
+    R1 = prop.data(2);
+    R2 = prop.data(3);
     %Cámara
     Brillo = prop.data(6);
     Contraste= prop.data(8);
@@ -207,7 +207,7 @@ Corr_fase2=Corr_fase0;
 % Corr_fase2=Corr_fase2-Corr_fase2(end);
 % Corr_fase=Corr_fase-Corr_fase(1,1);
 %vec_u=unwrap(vec_fase_rel(4,NG));
-text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  L4= ',num2str(Lam4),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Corrimiento de fase(rad [0 2*pi])';
 
