@@ -3,8 +3,8 @@ clear all
 % close all
 clc
 %---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
-TMfil=1024;
-TMcol=1280;
+TMfil=1920;
+TMcol=1080;
 tamH=800;
 tamV=600;
 
@@ -28,26 +28,24 @@ clc
 tic% incia el contador de tiempo
 
 %-----Variables inciales globales
-%Configuracion óptica
-Pol=+14;
-Ana=+122;
-Lam4=+60;
-%Modulador
-BrilloMod=90;
-ContrasteMod=180;
+camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
+% Carga de propiedades de la medida
+prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta labview
+    %Arqui Óptica
+    Pol = prop.data(1);
+    Ana = prop.data(4);
+    R1 = prop.data(2);
+    R2 = prop.data(3);
+    %Cámara
+    Brillo = prop.data(6);
+    Contraste= prop.data(8);
+    Exposurenro=prop.data(5);
 
-camino='Z:\Documents\AREA53\GRUPO DE OPTICA\MAO\07 - CAMERA\';
-% TMfil=1024;
-% TMcol=1280;
+TMcol = 1920;
+TMfil = 1080;
 
-TMcol = 1350;
-TMfil = 860;
-
-tamH=800;
-tamV=600;
-Brillo=255;
-Contraste=0;
-Exposurenro=-8;
+tamH=1024;
+tamV=768;
 
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
@@ -62,38 +60,24 @@ NivelGris=zeros(52,1);
 %1)--------Activar la captura de video de nuevo
 
 %Inicializacion para que matlab vea la camara
-vid=videoinput('winvideo','2','RGB8_1280x1024');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
-set(vid,'ReturnedColorSpace','grayscale');
+vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
+%set(vid,'ReturnedColorSpace','grayscale');
 
 %Cambia brillo y contraste
 src = getselectedsource(vid); 
-get(src);%% muestra otras propiedades.
+%get(src);%% muestra otras propiedades.
 clc
-
-set(src,'BrightnessMode','manual');
-set(src,'Brightness',Brillo);%% Cambia el brillo.
-
-set(src,'ContrastMode','manual');
-set(src,'Contrast',Contraste);%% Cambia el contraste.
-
-set(src,'GainMode','manual');
-set(src,'Gain',0);%% Cambia el brillo.
-
-set(src,'BacklightCompensationMode','manual');
-set(src,'BacklightCompensation','off');%% Cambia el brillo.
-
-set(src,'ExposureMode','manual');
-set(src,'Exposure',Exposurenro);%% Cambia el brillo.
-
-get(src)
+%get(src)
 
 
 figure;
         Tgca=[tamH tamV];
-        get(gcf);set(gcf,'units','pixels');clc;
+        %get(gcf);
+        set(gcf,'units','pixels');clc;
         set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
 
-        get(gca);set(gca,'units','pixels');clc;
+        %get(gca);
+        set(gca,'units','pixels');clc;
         set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
   
 vidRes = get(vid, 'VideoResolution');
@@ -104,8 +88,8 @@ nBands = get(vid, 'NumberOfBands');
  h = fspecial('average',[9 9]);
 for rep=1:Nmed%:10
     
-    cont=52
-for n=1:5:256
+    cont=52;
+for n=1:5:256 % De aquí se cambia cada cuanto se toman imágenes.
     NG=256-n;
     fprintf('Nivel de gris %g \n',NG)
     recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=NG; %elemento a proyectar
@@ -127,11 +111,23 @@ drawnow
     imaref=F(f1:f2,c1:c2);
     imaref=imfilter(mat2gray(imaref),h,'replicate');
     imaref=mat2gray(imaref);
-
+    
+    %imshow(imaref);
+    
+    %imwrite( imaref, strcat( 'imaref_' , num2str(n) ,'.png'));
+    
+    %save('imaref' + num2str(n) , uint8(imaref) );
+    
     %se extrae la imagen de de corrimiento de fase
     imacorr=F(f3:f4,c1:c2);clear ima
     imacorr=imfilter(mat2gray(imacorr),h,'replicate');
     imacorr=mat2gray(imacorr);
+    %imshow(imacorr);
+    
+    %imwrite( imacorr, strcat( 'imacorr_' , num2str(n) ,'.png'));
+    %pause(2); 
+    
+    %save('imacorr' + num2str(n) , imacorr )
     %imshow(imaref);axis on
 
  %------------------Imagen de referencia-------------------------
@@ -175,8 +171,8 @@ drawnow
     clear Fase_prom Fase_prom_0 val_max IX
     %-------------
     
-    name=strcat(camino,'PY_',num2str(NG),'.bmp');
-    imwrite(F,name);
+%     name=strcat(camino,'PY_',num2str(NG),'.bmp');
+%     imwrite(F,name);
     clear F
 end
 
@@ -211,7 +207,7 @@ Corr_fase2=Corr_fase0;
 % Corr_fase2=Corr_fase2-Corr_fase2(end);
 % Corr_fase=Corr_fase-Corr_fase(1,1);
 %vec_u=unwrap(vec_fase_rel(4,NG));
-text_T=strcat('Bm= ',num2str(BrilloMod),'  Cm= ',num2str(ContrasteMod),'  P= ',num2str(Pol), '  L4= ',num2str(Lam4),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Corrimiento de fase(rad [0 2*pi])';
 
@@ -252,7 +248,8 @@ ylab=ylab';
 grid on;axis on;
 title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');...
 xlabel(text_x,'FontSize',10);ylabel(text_y,'FontSize',10);
-get(gca);axis on;box on;
+%get(gca);
+axis on;box on;
 set(gca,'XLimMode','manual');
 set(gca,'XLim',[0 255]);
 set(gca,'XTick',xtic);
@@ -262,10 +259,13 @@ set(gca,'YLim',[-0.2 2]);
 set(gca,'YTick',ytic);
 set(gca,'YTick',ylab);  
 %figure,plot(NivelGris,Corr_fase,'b-*',NivelGris,myunwrap,'r-*');grid on
-
+nombre_archivo = prop.textdata(9);
 resultados=[NivelGris fase_prom fase_err];
- save([camino,'resultados_fase'],'resultados');
-dlmwrite('Z:\Documents\AREA53\GRUPO DE OPTICA\MAO\07 - CAMERA\resultados_fase.dat',resultados,'delimiter','\t', 'precision', '%.6f');
-fprintf('El proceso demoró %g minutos \n',toc/60)
+camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'...
+            ,nombre_archivo,'_fase'));      
+    save(camino, 'resultados');
+    saveas(gcf,camino, 'png')
+    dlmwrite(camino, resultados,'delimiter','\t', 'precision', '%.6f');
+    fprintf('El proceso demoró %g minutos \n',toc/60)
 % close all
 return

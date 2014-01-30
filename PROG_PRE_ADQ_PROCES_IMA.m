@@ -1,51 +1,46 @@
+
 %I)---------PRIMER PROGRAMA: Toma una imagen y la usa para el prepocesamiento antes de la toma de datos.
 
 
 %% 1)--------Visualizar el video a escala [800 600]
-
+seguir = 2;
 clear all
 % close all
 clc
-TMfil=1024;
+TMfil=960;
 TMcol=1280;
 
 %Inicializar la camara
-vid=videoinput('winvideo','2','RGB8_1280x1024');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
+vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
 set(vid,'ReturnedColorSpace','grayscale');
 
-val_Brightness =255;
-val_Contrast = 0;
-val_Gain = 0;
-val_BacklightCompensation ='off';
-val_Exposure = -11;
-seguir=1;
+%val_Brightness =255;
+%val_Contrast = 0;
+%val_Gain = 34;
+%val_BacklightCompensation ='off';
+%val_Exposure = -6;
 
 src = getselectedsource(vid);
 % con  imaqhelp(src,'nombredelapropiedad') y/o propinfo(src,'nombredelapropiedad')  se pueden obtener los valores
 % posibles para determinada propiedad 
-set(src,'BrightnessMode','manual');
-set(src,'Brightness',val_Brightness);%
-
-set(src,'ContrastMode','manual');
-set(src,'Contrast',val_Contrast);%
-
-set(src,'GainMode','manual');
-set(src,'Gain',val_Gain);%
-
-set(src,'BacklightCompensationMode','manual');
-set(src,'BacklightCompensation',val_BacklightCompensation);%
-
-set(src,'ExposureMode','manual');
-set(src,'Exposure',val_Exposure);%
-
-val_Gamma=100;
-set(src,'Gamma',val_Gamma);%
-
+%set(src,'BrightnessMode','manual');
+%set(src,'Brightness',val_Brightness);%
+%set(src,'ContrastMode','manual');
+%set(src,'Contrast',val_Contrast);%
+%set(src,'GainMode','manual');
+%set(src,'Gain',val_Gain);%
+%set(src,'BacklightCompensationMode','manual');
+%set(src,'BacklightCompensation',val_BacklightCompensation);%
+%set(src,'ExposureMode','manual');
+%set(src,'Exposure',val_Exposure);%
+%val_Gamma=100;
+%set(src,'Gamma',val_Gamma);%
 
 %Ajustar el video a una ventana de 800 x 600 pixeles 
 vidRes = get(vid, 'VideoResolution');
 nBands = get(vid, 'NumberOfBands');
-figure(1);hImage = image( zeros(vidRes(2),vidRes(1),nBands));
+figure(1);
+hImage = image( zeros(vidRes(2),vidRes(1),nBands));
 Tgca=[800 600];
 get(gcf);set(gcf,'units','pixels');clc;
 set(gcf,'position',[50 (TMfil-Tgca(1,2))/2 Tgca(1,1)+100 Tgca(1,2)+100]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
@@ -57,17 +52,17 @@ preview(vid,hImage);
 
 % 2)---Cambiar las propiedades de la cámara: cambie los valores y vuelva a correr esta cell del programa
 
-src = getselectedsource(vid); 
-get(src);%% muestra otras propiedades.
+%src = getselectedsource(vid); 
+%get(src);%% muestra otras propiedades.
 clc
 % %propinfo(src,'Exposure')
 
 %
-TMcol = 1350;
-TMfil = 860;
+TMcol = 1920;
+TMfil = 1080;
 
-tamH = 800;
-tamV = 600;
+tamH = 1024;
+tamV = 768;
 
 figure(5);
         Tgca=[tamH tamV];
@@ -89,17 +84,20 @@ figure(5);
 
 %  h=msgbox('X^2 + Y^2','Title','custom',Data,hot(64),CreateStruct);
 F=uint8(zeros(vidRes(2),vidRes(1)));
-seguir=1;
-figure(2);
-Tgca=[300 225];TMfil=1024;TMcol=1280;
+%seguir=1;
+figure(4);
+Tgca=[300 300];TMfil=1024;TMcol=1280;
+% Tgca=[500 500];TMfil=960;TMcol=1280;
 get(gcf);set(gcf,'units','pixels');clc;
 set(gcf,'position',[(TMcol-Tgca(1,1)-80) (TMfil-Tgca(1,2))/2 Tgca(1,1)+80 Tgca(1,2)+100]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
 get(gca);set(gca,'units','pixels');clc;
 set(gca,'position',[40 40 Tgca(1,1) Tgca(1,2)]);
+seguir = 2;
 while seguir==1
     
     % Le puse la llamada a la función dentro del while
-    [seguir CamProperties]=cameraproperties(vid,val_Brightness,val_Contrast,val_Gain,val_BacklightCompensation,val_Exposure);
+    %[seguir CamProperties]=cameraproperties(vid,val_Gain,val_Exposure);
+        pause(1); % se tuvo que poner esta pausa por un problema de respuesta de las tarjetas
     F=getsnapshot(vid);drawnow
     %figure(2)=hist_mean_std_Visib_frame_adq(F);
     X=0:255;
@@ -120,14 +118,14 @@ while seguir==1
 end
 
 uiwait(msgbox('¿Desea guardar la imagen con el nombre especificado en name?','Guardar?'))
-
-camino='Z:\Documents\AREA53\GRUPO DE OPTICA\MAO\07 - CAMERA\';
+F=getsnapshot(vid);drawnow
+camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
 name=strcat(camino,'prueba.bmp');
 imwrite(F,name);
 clear F
 close all
-brillo=get(src,'Brightness')
-contraste=get(src,'Contrast')
+% brillo=get(src,'Brightness')
+% contraste=get(src,'Contrast')
 
 %%
 
@@ -147,12 +145,12 @@ while (seguir==1)
     switch tipo
 
         case 'Seleccionar_subimagenes'
-            camino='Z:\Documents\AREA53\GRUPO DE OPTICA\MAO\07 - CAMERA\';
+            camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
             name=strcat(camino,'prueba.bmp');
             imagen=imread(name);
             
             
-            figure,Tgca=[size(imagen,2) size(imagen,1)];
+            figure(6),Tgca=[size(imagen,2) size(imagen,1)];
             get(gcf);set(gcf,'units','pixels');clc;
             set(gcf,'position',[0 0 Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]);
 
@@ -171,7 +169,8 @@ while (seguir==1)
             IR=imagen(1:f2,c1:c2);
             IC=imagen(f3:end,c1:c2);
             f2=size(IR,1);
-            imagen=[IR;IC];clear IR IC sub_ima cor_rec
+            imagen=[IR;IC];
+            clear IR IC sub_ima cor_rec
             close all
             
             figure,Tgca=[size(imagen,2) size(imagen,1)];
@@ -180,7 +179,7 @@ while (seguir==1)
 
             get(gca);set(gca,'units','pixels');clc;
             set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-            [sub_ima,cor_rec] = imcrop(imagen);
+            %[sub_ima,cor_rec] = imcrop(imagen);
             imagesc(imagen);colormap gray;
             
             uiwait(msgbox('SELECCIONE UN PUNTO QUE INDIQUE LA POSICION DE LA PRIMERA FILA'));
@@ -207,7 +206,7 @@ while (seguir==1)
 
             get(gca);set(gca,'units','pixels');clc;
             set(gca,'position',[50 150 Tgca(1,1) Tgca(1,2)]);
-            [sub_ima,cor_rec] = imcrop(imagen);
+            %[sub_ima,cor_rec] = imcrop(imagen);
        
             imagesc(imagen);colormap gray;title('Imagen final para calcular el corrimieto de fase');
             hpop = uicontrol('Parent', f,'Style', 'popup', 'String', 'Reiniciar|Finalizar',...
@@ -224,7 +223,7 @@ while (seguir==1)
             elseif val==2
                 disp('Se terminará el proceso de selección, se guardan las coordenadas actuales y continua la ejecución')
                 close(f);
-                camino='Z:\Documents\AREA53\GRUPO DE OPTICA\MAO\07 - CAMERA\';
+                camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
                 save([camino,'coor_subima'],'coorsubima');
 %                 save([camino,'coor_subima'],'coor_subima']);
                 seguir=0;
@@ -238,6 +237,5 @@ while (seguir==1)
     end
 end
 
-return
 
 %%%% falta incluir la parte de el radio del orden cero
