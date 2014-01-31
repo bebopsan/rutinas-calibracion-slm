@@ -1,2 +1,2 @@
-Pi	Li	Lo	Po	E	B	G	C	Im40
--45	0	22.5	-45	-7	34	0	0	0
+Pi	Li	Lo	Po	E	B	G	C	If1-52
+20	20	20	20	-7	34	0	0	0
