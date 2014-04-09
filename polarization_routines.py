@@ -54,7 +54,7 @@ def plot_ellipse( J, name = '', show = True):
     
     """
     
-    import sympy as sy
+    #import sympy as sy
     import matplotlib as mpl
     from mpl_toolkits.mplot3d import Axes3D
     import numpy as np
@@ -62,14 +62,14 @@ def plot_ellipse( J, name = '', show = True):
     import matplotlib.gridspec as gridspec
 
     
-    assert isinstance(J, sy.Matrix)
+    assert isinstance(J, np.matrix)
     assert J.shape == (2,1)
-    J = J.evalf()
+    
 
     "Convert elements of the vector to complex numbers"
-    J_aux = np. zeros((2,1), dtype = complex)
+    J_aux = np.zeros((2,1), dtype = complex)
     for i in [0,1]:
-        J_aux[i] = complex(J[i])
+        J_aux[i] = J[i]
         
     J = J_aux
     
@@ -92,11 +92,13 @@ def plot_ellipse( J, name = '', show = True):
     phi1 = np.angle( J[0] )
     phi2 =  np.angle( J[1] )
 
-    x = np.linspace(-2, 2, 100)
-    z = Ex * np.cos(theta + phi1)
-    y = Ey * np.cos(theta + phi2)
+    X = np.linspace(-2, 2, 100)
+    Y = Ex * np.cos(theta + phi1)
+    Z = Ey * np.cos(theta + phi2)
+
+    lim = np.sqrt(Ex**2+Ey**2)
     
-    axes[0].plot(x, y, z, zdir ='z')
+    axes[0].plot(X, Y, Z, zdir ='Z')
     axes[0].set_xlim(-2, 2)
     
     axes[0].set_ylim(-1, 1)
@@ -110,17 +112,18 @@ def plot_ellipse( J, name = '', show = True):
     #axes[0].legend()    axes[0].set_yticklabels([])
     axes[0].set_xticklabels([])
     axes[0].set_zticklabels([])
-    axes[1].plot(y, z)
+    axes[1].plot(Y, Z)
     #axes[1].ylim([-1,1])
     #axes[1].xlim([-1,1])
     #axes[1].zlim([-1,1])
-    axes[1].axis([-1,1,-1,1])
+    axes[1].axis([-lim,lim,-lim,lim])
     axes[1].set_xlabel('Normalized $x$ component of $E$')
     axes[1].set_ylabel('Normalized $y$ component of $E$')
     axes[1].set_aspect('equal')
-    
-    axes[1].set_axis_off()
-    
+    axes[1].plot([-1, 1],[-1, 1])
+    axes[1].plot([-1, 1],[-0.41421356237309503, 0.41421356237309503])
+    axes[1].plot([-1, 1],[0, 0])
+    0.41421356237309503
     if show == True:
         plt.show()
     else:
