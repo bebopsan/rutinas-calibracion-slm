@@ -1,0 +1,5 @@
+in-L/2=-23.Something
+in-L/4=-66
+out-L/4=45
+out-P=36
+ 
