@@ -97,8 +97,7 @@ def plot_ellipse( J, name = '', show = True):
     Z = Ey * np.cos(theta + phi2)
 
     lim = np.sqrt(Ex**2+Ey**2)
-    
-    axes[0].plot(X, Y, Z, zdir ='Z')
+       
     axes[0].set_xlim(-2, 2)
     
     axes[0].set_ylim(-1, 1)
@@ -112,7 +111,7 @@ def plot_ellipse( J, name = '', show = True):
     #axes[0].legend()    axes[0].set_yticklabels([])
     axes[0].set_xticklabels([])
     axes[0].set_zticklabels([])
-    axes[1].plot(Y, Z)
+   
     #axes[1].ylim([-1,1])
     #axes[1].xlim([-1,1])
     #axes[1].zlim([-1,1])
@@ -120,9 +119,18 @@ def plot_ellipse( J, name = '', show = True):
     axes[1].set_xlabel('Normalized $x$ component of $E$')
     axes[1].set_ylabel('Normalized $y$ component of $E$')
     axes[1].set_aspect('equal')
-    axes[1].plot([-1, 1],[-1, 1])
-    axes[1].plot([-1, 1],[-0.41421356237309503, 0.41421356237309503])
-    axes[1].plot([-1, 1],[0, 0])
+    axes[0].plot([-4, 4],[0, 0],zs=[0,0], color='green')
+    axes[0].plot([-2, -2],[0, 0],zs=[-2,2], color='green')
+    axes[0].plot([-2, -2],[-2, 2],zs=[0,0],color='green')
+    #axes[1].plot([-1, 1],[-1, 1], color='blue')
+    #axes[1].plot([-1, 1],[-0.41421356237309503, 0.41421356237309503], color='blue')
+    axes[1].plot([-2, 2],[0, 0], color='green')
+    axes[1].plot([0, 0],[-2, 2], color='green')
+
+
+    axes[0].plot(X, Y, Z, zdir ='Z', color='red')
+    axes[1].plot(Y, Z, color='red')
+    
     0.41421356237309503
     if show == True:
         plt.show()
