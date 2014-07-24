@@ -1,2 +1,2 @@
-Pi	Li	Lo	Po	E	B	G	C	Imagen40
--22	-45	-45	-68	-5	57	0	0	0
+Pi	Li	Lo	Po	E	B	G	C	In1
+0	0	0	0	-9	34	0	0	0
