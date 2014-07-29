@@ -1,2 +1,2 @@
-Pi	Li	Lo	Po	E	B	G	C	In1
-0	0	0	0	-9	34	0	0	0
+Pi	Li	Lo	Po	E	B	G	C	In-fourier70
+0	0	0	0	0	0	0	0	0
