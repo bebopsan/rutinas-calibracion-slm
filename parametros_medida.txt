@@ -1,2 +1,2 @@
-Pi	Li	Lo	Po	E	B	G	C	In-fourier70
-0	0	0	0	0	0	0	0	0
+Pi	Li	Lo	Po	E	B	G	C	Tal_vez_Borrame_2
+11	0	-45	-68	-10	42	0	0	0

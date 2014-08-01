@@ -143,6 +143,6 @@ set(gca,'YTick',ylab);
     dlmwrite(camino, resultados,'delimiter','\t', 'precision', '%.6f');
     fprintf('El proceso demoró %g minutos \n',toc/60)
     % close all
-
+exit
     return
     %------------------Imagen de referencia-------------------------

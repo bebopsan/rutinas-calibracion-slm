@@ -268,4 +268,5 @@ camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'..
     dlmwrite(camino, resultados,'delimiter','\t', 'precision', '%.6f');
     fprintf('El proceso demoró %g minutos \n',toc/60)
 % close all
+exit
 return
