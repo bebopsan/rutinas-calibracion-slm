@@ -1,29 +1,30 @@
 %%  --------Toma de datos------------
 clear all
-% close all
-clc
-%---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
-TMfil=1920;
-TMcol=1080;
-tamH=800;
-tamV=600;
-
-pause(0);
-figure(2),
-    Tgca=[tamH tamV];
-    get(gcf);set(gcf,'units','pixels');clc;
-    set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
-
-    get(gca);set(gca,'units','pixels');clc;
-    set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-    recuadro=ones(tamV,tamH).*0; recuadro(tamV/2:end,:)=0; %elemento a proyectar
-    imshow(recuadro,[0 255]);drawnow;colormap gray;
-% uiwait(msgbox('Presione enter si quiere correr la adquisión con esta posición','Correr el programa de adquisición?'));
-%-------------------------
-%%
-clear all
 close all
 clc
+%---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
+% TMfil=1920;
+% TMcol=1080;
+% 
+% tamH=800;
+% tamV=600; 
+% 
+% pause(0);
+% figure(2),
+%     Tgca=[tamH tamV];
+%     get(gcf);set(gcf,'units','pixels');clc;
+%     set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
+% 
+%     get(gca);set(gca,'units','pixels');clc;
+%     set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
+%     recuadro=ones(tamV,tamH).*0; recuadro(tamV/2:end,:)=0; %elemento a proyectar
+%     imshow(recuadro,[0 255]);drawnow;colormap gray;
+% % uiwait(msgbox('Presione enter si quiere correr la adquisión con esta posición','Correr el programa de adquisición?'));
+%-------------------------
+%%
+% clear all
+% close all
+% clc
 % pause(5)
 tic% incia el contador de tiempo
 
@@ -41,49 +42,38 @@ prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta lab
     Contraste= prop.data(8);
     Exposurenro=prop.data(5);
 
-TMcol = 1920;
-TMfil = 1080;
+TMcol=1920;
+TMfil=1080;
 
+%%These two lines must be uncommented when using Holoeye LC2002
+
+%tamH=800;
+%tamV=600; 
+
+%These two lines must be uncommented when using Holoeye LC2012
 tamH=1024;
 tamV=768;
 
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
 c1=coorsubima(1,5); c2=coorsubima(1,6);
-filalimite=round(f2-f1)+1;
 
-Nmed=1;
-h = fspecial('average',[9 9]);
-Corr_fase=zeros(52,Nmed);
-NivelGris=zeros(52,1);
+
 %1)--------Activar la captura de video de nuevo
 
 %Inicializacion para que matlab vea la camara
 vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
 set(vid,'ReturnedColorSpace','grayscale');
 
-
-%Cambia brillo y contraste
-src = getselectedsource(vid); 
-%get(src);%% muestra otras propiedades.
 clc
-%get(src)
-
 
 figure;
         Tgca=[tamH tamV];
-        %get(gcf);
+        
         set(gcf,'units','pixels');clc;
-        set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
-
-        %get(gca);
+        set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); 
         set(gca,'units','pixels');clc;
         set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-  
-vidRes = get(vid, 'VideoResolution');
-nBands = get(vid, 'NumberOfBands');
-
-%F = uint8(zeros(vidRes(2),vidRes(1),nBands));
 
  h = fspecial('average',[9 9]);
  i=1;
@@ -95,8 +85,6 @@ nBands = get(vid, 'NumberOfBands');
      recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=NG; %elemento a proyectar
      imshow(recuadro,[0 255]);drawnow;colormap gray;
      pause(0.1);
-     
-     
      drawnow
      F=getsnapshot(vid);
      %se extrae la imagen de referencia
@@ -117,15 +105,9 @@ nBands = get(vid, 'NumberOfBands');
      
      clear F
  end
-
-%%
-text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
-text_x= 'Nivel de gris(8 bits [0 255])';
-text_y='Corrimiento de fase(rad [0 2*pi])';
-
 delete(vid)
 
-grayLevels=0:5:255;
+grayLevels=255:-5:0;
 initialGuess = 0.1* (0:pi/(52 - 1):pi);
 maxIterations=50;
 precision=1e-5;
@@ -190,12 +172,36 @@ camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'..
     %saveas(gcf,camino, 'png')
     
 %% Plots the phase shift that better represent our modulation 
+
+
 figure; 
 plot(grayLevels, shifted_phase ,'r-o');
 hold on, plot(grayLevels, reference_phase , 'b-o');
 plot(grayLevels, unwrap(mod(phase_shift , 2 * pi)), 'g-o');
 hold off
-title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_x= 'Nivel de gris(8 bits [0 255])';
+text_y='Corrimiento de fase(rad [0 2*pi])';
+
+xtic=0:15:255;
+xlab=0:15:255;
+xlab=xlab';
+ytic=-0.2:0.1:2;
+ylab=-0.2:0.1:2;
+ylab=ylab';
+
+grid on;axis on;
+title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');...
+xlabel(text_x,'FontSize',10);ylabel(text_y,'FontSize',10);
+box on;
+set(gca,'XLimMode','manual');
+set(gca,'XLim',[0 255]);
+set(gca,'XTick',xtic);
+set(gca,'XTick',xlab);
+set(gca,'YLimMode','manual');
+set(gca,'YLim',[-0.2 2]);
+set(gca,'YTick',ytic);
+set(gca,'YTick',ylab);  
 legend({'Modulating' 'Reference' 'Difference'});
 saveas(gcf,strcat(camino,'1'), 'png')
     

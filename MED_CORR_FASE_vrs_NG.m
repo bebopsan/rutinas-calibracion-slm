@@ -1,23 +1,23 @@
 %%  --------Toma de datos------------
-clear all
+%clear all
 % close all
-clc
+%clc
 %---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
-TMfil=1920;
-TMcol=1080;
-tamH=800;
-tamV=600;
-
-pause(0);
-figure(2),
-    Tgca=[tamH tamV];
-    get(gcf);set(gcf,'units','pixels');clc;
-    set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
-
-    get(gca);set(gca,'units','pixels');clc;
-    set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-    recuadro=ones(tamV,tamH).*0; recuadro(tamV/2:end,:)=0; %elemento a proyectar
-    imshow(recuadro,[0 255]);drawnow;colormap gray;
+% TMfil=1920;
+% TMcol=1080;
+% tamH=800;
+% tamV=600;
+% 
+% pause(0);
+% figure(2),
+%     Tgca=[tamH tamV];
+%     get(gcf);set(gcf,'units','pixels');clc;
+%     set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
+% 
+%     get(gca);set(gca,'units','pixels');clc;
+%     set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
+%     recuadro=ones(tamV,tamH).*0; recuadro(tamV/2:end,:)=0; %elemento a proyectar
+%     imshow(recuadro,[0 255]);drawnow;colormap gray;
 % uiwait(msgbox('Presione enter si quiere correr la adquisión con esta posición','Correr el programa de adquisición?'));
 %-------------------------
 %%
@@ -44,13 +44,19 @@ prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta lab
 TMcol = 1920;
 TMfil = 1080;
 
+%%These two lines must be uncommented when using Holoeye LC2002
+
+%tamH=800;
+%tamV=600; 
+
+%These two lines must be uncommented when using Holoeye LC2012
 tamH=1024;
 tamV=768;
 
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
 c1=coorsubima(1,5); c2=coorsubima(1,6);
-filalimite=round(f2-f1)+1;
+
 
 Nmed=1;
 h = fspecial('average',[9 9]);
@@ -60,127 +66,92 @@ NivelGris=zeros(52,1);
 %1)--------Activar la captura de video de nuevo
 
 %Inicializacion para que matlab vea la camara
-vid=videoinput('tisimaq','1');% get(vid);% set(vid,'ROIPosition',[0 0 640 512]);
-%set(vid,'ReturnedColorSpace','grayscale');
+vid=videoinput('tisimaq','1');
 
-%Cambia brillo y contraste
-src = getselectedsource(vid); 
-%get(src);%% muestra otras propiedades.
 clc
-%get(src)
-
 
 figure;
         Tgca=[tamH tamV];
         %get(gcf);
         set(gcf,'units','pixels');clc;
-        set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); % set(gcf,'position',[-1280 -512 vidRes(2) vidRes(1)]); 
+        set(gcf,'position',[TMcol TMfil-tamV Tgca(1,1) Tgca(1,2)]); 
 
         %get(gca);
         set(gca,'units','pixels');clc;
         set(gca,'position',[0 0 Tgca(1,1) Tgca(1,2)]);
-  
-vidRes = get(vid, 'VideoResolution');
-nBands = get(vid, 'NumberOfBands');
 
-%F = uint8(zeros(vidRes(2),vidRes(1),nBands));
+h = fspecial('average',[9 9]);
 
- h = fspecial('average',[9 9]);
-for rep=1:Nmed%:10
-    
+for rep=1:Nmed%:10    
     cont=52;
-for n=1:5:256 % De aquí se cambia cada cuanto se toman imágenes.
-    NG=256-n;
-    fprintf('Nivel de gris %g \n',NG)
-    recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=NG; %elemento a proyectar
-    imshow(recuadro,[0 255]);drawnow;colormap gray;
-    pause(0.1);
-    
-    %-------Captura de un frame de video
-%     F = uint8(zeros(vidRes(2),vidRes(1),nBands));
-%     for n=1%:1:5
-%     F=F+getsnapshot(vid)./5;
-%     %OJOOOOOOOOO probar: frame=getdata (vid);
-%     %flushdata          - Remove buffered image frames from memory.
-%     %getdata            - Return acquired image frames from buffer.
-%     %---------
-%     end
-drawnow
-     F=getsnapshot(vid);
-     %se extrae la imagen de referencia
-    imaref=F(f1:f2,c1:c2);
-    imaref=imfilter(mat2gray(imaref),h,'replicate');
-    imaref=mat2gray(imaref);
-    
-    %imshow(imaref);
-    
-    %imwrite( imaref, strcat( 'imaref_' , num2str(n) ,'.png'));
-    
-    %save('imaref' + num2str(n) , uint8(imaref) );
-    
-    %se extrae la imagen de de corrimiento de fase
-    imacorr=F(f3:f4,c1:c2);clear ima
-    imacorr=imfilter(mat2gray(imacorr),h,'replicate');
-    imacorr=mat2gray(imacorr);
-    %imshow(imacorr);
-    
-    %imwrite( imacorr, strcat( 'imacorr_' , num2str(n) ,'.png'));
-    %pause(2); 
-    
-    %save('imacorr' + num2str(n) , imacorr )
-    %imshow(imaref);axis on
+    for n=1:5:256 % De aquí se cambia cada cuanto se toman imágenes.
+        NG=256-n;
+        fprintf('Nivel de gris %g \n',NG)
+        recuadro=ones(tamV,tamH).*255; recuadro(tamV/2:end,:)=NG; %elemento a proyectar
+        imshow(recuadro,[0 255]);drawnow;colormap gray;
+        pause(0.1);
+        drawnow
 
- %------------------Imagen de referencia-------------------------
+        F=getsnapshot(vid);
+        %se extrae la imagen de referencia
+        imaref=F(f1:f2,c1:c2);
+        imaref=imfilter(mat2gray(imaref),h,'replicate');
+        imaref=mat2gray(imaref);
 
-    imaref=mean(imaref,1);
-    TFimaref=ifftshift(fft(fftshift(imaref)));clear imaref
-    fac=sqrt(1/(size(TFimaref,2)*size(TFimaref,1)));
-    TFimaref=TFimaref.*fac;
-    radio_mask=2;
-    TFimaref(:,floor(size(TFimaref,2)/2)+1-radio_mask:floor(size(TFimaref,2)/2)+1+radio_mask)=0;
-    %figure(1);plot(abs(TFimaref));title(['imarecf', num2str(NGI)]);pause(0.5);drawnow;
-    [val_max,IX] = sort(abs(TFimaref),'descend');
-    %-----------claculo de la fase de referencia
-    fase_max1=atan2(imag(TFimaref(1,IX(1))),real(TFimaref(1,IX(1))));
-    fase_max2=atan2(imag(TFimaref(1,IX(2))),real(TFimaref(1,IX(2))));
-    Fase_prom_0=(fase_max1-fase_max2)/2;%+fase_max2)/2
-    clear fase_max1 fase_max2 val_max IX
+        %save('imaref' + num2str(n) , uint8(imaref) );
+
+        %se extrae la imagen de de corrimiento de fase
+        imacorr=F(f3:f4,c1:c2);clear ima
+        imacorr=imfilter(mat2gray(imacorr),h,'replicate');
+        imacorr=mat2gray(imacorr);
+
+        %save('imacorr' + num2str(n) , imacorr )
+
+     %------------------Imagen de referencia-------------------------
+
+        imaref=mean(imaref,1);
+        TFimaref=ifftshift(fft(fftshift(imaref)));clear imaref
+        fac=sqrt(1/(size(TFimaref,2)*size(TFimaref,1)));
+        TFimaref=TFimaref.*fac;
+        radio_mask=2;
+        TFimaref(:,floor(size(TFimaref,2)/2)+1-radio_mask:floor(size(TFimaref,2)/2)+1+radio_mask)=0;
+        %figure(1);plot(abs(TFimaref));title(['imarecf', num2str(NGI)]);pause(0.5);drawnow;
+        [~,IX] = sort(abs(TFimaref),'descend');
+        %-----------claculo de la fase de referencia
+        fase_max1=atan2(imag(TFimaref(1,IX(1))),real(TFimaref(1,IX(1))));
+        fase_max2=atan2(imag(TFimaref(1,IX(2))),real(TFimaref(1,IX(2))));
+        Fase_prom_0=(fase_max1-fase_max2)/2;%+fase_max2)/2
+        clear fase_max1 fase_max2 val_max IX
 
 
-    %------------------Imagen de corrimiento de fase-------------------------
+        %------------------Imagen de corrimiento de fase-------------------------
 
-    imacorr=mean(imacorr,1);
-    TFima=ifftshift(fft(fftshift(imacorr)));clear imacorr
-    fac=sqrt(1/(size(TFima,2)*size(TFima,1)));
-    TFima=TFima.*fac;
-    TFima(:,floor(size(TFima,2)/2)+1-radio_mask:floor(size(TFima,2)/2)+1+radio_mask)=0;
-    [val_max,IX] = sort(abs(TFima),'descend');
+        imacorr=mean(imacorr,1);
+        TFima=ifftshift(fft(fftshift(imacorr)));clear imacorr
+        fac=sqrt(1/(size(TFima,2)*size(TFima,1)));
+        TFima=TFima.*fac;
+        TFima(:,floor(size(TFima,2)/2)+1-radio_mask:floor(size(TFima,2)/2)+1+radio_mask)=0;
+        [~,IX] = sort(abs(TFima),'descend');
 
-    %-----------claculo de la fase de referencia
-    fase_max1=atan2(imag(TFima(1,IX(1))),real(TFima(1,IX(1))));
-    fase_max2=atan2(imag(TFima(1,IX(2))),real(TFima(1,IX(2))));
-    Fase_prom=(fase_max1-fase_max2)/2;
+        %-----------claculo de la fase de referencia
+        fase_max1=atan2(imag(TFima(1,IX(1))),real(TFima(1,IX(1))));
+        fase_max2=atan2(imag(TFima(1,IX(2))),real(TFima(1,IX(2))));
+        Fase_prom=(fase_max1-fase_max2)/2;
 
 
-    %------------------Construccion del vector de fase relativa-------------------------
-    NivelGris(cont,1)=NG;
-%     vec_fase_rel(2,NG)=Fase_prom_0;
-%     vec_fase_rel(3,NG)=Fase_prom;
-    Corr_fase(cont,rep)=Fase_prom-Fase_prom_0;
-    cont=cont-1;
-    clear Fase_prom Fase_prom_0 val_max IX
-    %-------------
-    
-%     name=strcat(camino,'PY_',num2str(NG),'.bmp');
-%     imwrite(F,name);
-    clear F
-end
+        %------------------Construccion del vector de fase relativa-------------------------
+        NivelGris(cont,1)=NG;
+        Corr_fase(cont,rep)=Fase_prom-Fase_prom_0;
+        cont=cont-1;
+        clear Fase_prom Fase_prom_0 IX
+        clear F
+    end
 
-% delete(vid)
-% Corr_fase=unwrap(Corr_fase);
-%Corr_fase=mod(Corr_fase,2*pi)./pi;
-Corr_fase(:,rep)=Corr_fase(:,rep)-Corr_fase(end,rep);
-Corr_fase0=mod(Corr_fase(:,rep),2*pi)./pi;%versión agl
+
+    %Corr_fase=unwrap(Corr_fase);
+    %Corr_fase=mod(Corr_fase,2*pi)./pi;
+    Corr_fase(:,rep)=Corr_fase(:,rep)-Corr_fase(end,rep);
+    Corr_fase0=mod(Corr_fase(:,rep),2*pi)./pi;%versión agl
 
 
 myunwrap=zeros(size(Corr_fase0));
@@ -269,4 +240,3 @@ camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'..
     fprintf('El proceso demoró %g minutos \n',toc/60)
 % close all
 exit
-return
