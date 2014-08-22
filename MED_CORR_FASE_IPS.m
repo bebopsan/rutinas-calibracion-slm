@@ -1,11 +1,17 @@
 %%  --------Toma de datos------------
 clear all
-% close all
+close all
 clc
 %---------------- Preajustar la correcta visualización de la señal que se envia al SLM.
+<<<<<<< HEAD
 %TMfil=1920;
 %TMcol=1080;
 %
+=======
+% TMfil=1920;
+% TMcol=1080;
+% 
+>>>>>>> FETCH_HEAD
 % tamH=800;
 % tamV=600; 
 % 
@@ -42,6 +48,7 @@ prop = importdata('parametros_medida.txt'); % Nombre del archivo que exporta lab
     Contraste= prop.data(8);
     Exposurenro=prop.data(5);
 
+<<<<<<< HEAD
 TMfil=1920;
 TMcol=1080;
 
@@ -50,6 +57,16 @@ TMcol=1080;
 %tamH=800;
 %tamV=600; 
 
+=======
+TMcol=1920;
+TMfil=1080;
+
+%%These two lines must be uncommented when using Holoeye LC2002
+
+%tamH=800;
+%tamV=600; 
+
+>>>>>>> FETCH_HEAD
 %These two lines must be uncommented when using Holoeye LC2012
 tamH=1024;
 tamV=768;
@@ -107,7 +124,7 @@ figure;
  end
 delete(vid)
 
-grayLevels=0:5:255;
+grayLevels=255:-5:0;
 initialGuess = 0.1* (0:pi/(52 - 1):pi);
 maxIterations=50;
 precision=1e-5;
@@ -173,6 +190,7 @@ camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'..
     
 %% Plots the phase shift that better represent our modulation 
 
+<<<<<<< HEAD
 text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
 text_x= 'Nivel de gris(8 bits [0 255])';
 text_y='Corrimiento de fase(rad [0 2*pi])';
@@ -196,11 +214,40 @@ set(gca,'YLimMode','manual');
 set(gca,'YLim',[-0.2 2]);
 set(gca,'YTick',ytic);
 set(gca,'YTick',ylab);  
+=======
+
+>>>>>>> FETCH_HEAD
 figure; 
 plot(grayLevels, shifted_phase ,'r-o');
 hold on, plot(grayLevels, reference_phase , 'b-o');
 plot(grayLevels, unwrap(mod(phase_shift , 2 * pi)), 'g-o');
 hold off
+<<<<<<< HEAD
+=======
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_x= 'Nivel de gris(8 bits [0 255])';
+text_y='Corrimiento de fase(rad [0 2*pi])';
+
+xtic=0:15:255;
+xlab=0:15:255;
+xlab=xlab';
+ytic=-0.2:0.1:2;
+ylab=-0.2:0.1:2;
+ylab=ylab';
+
+grid on;axis on;
+title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');...
+xlabel(text_x,'FontSize',10);ylabel(text_y,'FontSize',10);
+box on;
+set(gca,'XLimMode','manual');
+set(gca,'XLim',[0 255]);
+set(gca,'XTick',xtic);
+set(gca,'XTick',xlab);
+set(gca,'YLimMode','manual');
+set(gca,'YLim',[-0.2 2]);
+set(gca,'YTick',ytic);
+set(gca,'YTick',ylab);  
+>>>>>>> FETCH_HEAD
 legend({'Modulating' 'Reference' 'Difference'});
 saveas(gcf,strcat(camino,'1'), 'png')
     

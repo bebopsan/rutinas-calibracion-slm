@@ -56,7 +56,7 @@ tamV=768;
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);
 c1=coorsubima(1,5); c2=coorsubima(1,6);
-filalimite=round(f2-f1)+1;
+
 
 Nmed=1;
 h = fspecial('average',[9 9]);
@@ -145,6 +145,33 @@ for rep=1:Nmed%:10
         cont=cont-1;
         clear Fase_prom Fase_prom_0 IX
         clear F
+<<<<<<< HEAD
+=======
+    end
+
+
+    %Corr_fase=unwrap(Corr_fase);
+    %Corr_fase=mod(Corr_fase,2*pi)./pi;
+    Corr_fase(:,rep)=Corr_fase(:,rep)-Corr_fase(end,rep);
+    Corr_fase0=mod(Corr_fase(:,rep),2*pi)./pi;%versión agl
+
+
+myunwrap=zeros(size(Corr_fase0));
+
+
+for k=1:51;
+    cambio=Corr_fase0(k+1)-Corr_fase0(k);
+    
+    if cambio >1
+%        myunwrap(k+1:end)=-2;
+        Corr_fase0(k+1)=Corr_fase0(k+1)-2;
+
+    end
+    if cambio <-1
+%        myunwrap(k+1:end)=+2;
+        Corr_fase0(k+1)=Corr_fase0(k+1)+2;
+%cambiog(k)=cambio;
+>>>>>>> FETCH_HEAD
     end
 
 
@@ -217,4 +244,3 @@ camino = cell2mat(strcat('C:\Users\franjas\Documents\rutinas-calibracion-slm\'..
     fprintf('El proceso demoró %g minutos \n',toc/60)
 % close all
 exit
-return
