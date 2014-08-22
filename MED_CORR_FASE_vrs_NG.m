@@ -145,8 +145,6 @@ for rep=1:Nmed%:10
         cont=cont-1;
         clear Fase_prom Fase_prom_0 IX
         clear F
-<<<<<<< HEAD
-=======
     end
 
 
@@ -171,48 +169,45 @@ for k=1:51;
 %        myunwrap(k+1:end)=+2;
         Corr_fase0(k+1)=Corr_fase0(k+1)+2;
 %cambiog(k)=cambio;
->>>>>>> FETCH_HEAD
     end
+end
+Corr_fase2=Corr_fase0;
+%Corr_fase2=Corr_fase0+myunwrap;
+
+% minimo=min(Corr_fase2);
+% Corr_fase2=Corr_fase2-Corr_fase2(end);
+% Corr_fase=Corr_fase-Corr_fase(1,1);
+%vec_u=unwrap(vec_fase_rel(4,NG));
+text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
+text_x= 'Nivel de gris(8 bits [0 255])';
+text_y='Corrimiento de fase(rad [0 2*pi])';
 
 
-    %Corr_fase=unwrap(Corr_fase);
-    %Corr_fase=mod(Corr_fase,2*pi)./pi;
-    Corr_fase(:,rep)=Corr_fase(:,rep)-Corr_fase(end,rep);
-    Corr_fase0=mod(Corr_fase(:,rep),2*pi)./pi;%versión agl
-   
-    for k=1:51;
-        cambio=Corr_fase0(k+1)-Corr_fase0(k);
 
-        if cambio >1
-    %        myunwrap(k+1:end)=-2;
-            Corr_fase0(k+1)=Corr_fase0(k+1)-2;
-
-        end
-        if cambio <-1
-    %        myunwrap(k+1:end)=+2;
-            Corr_fase0(k+1)=Corr_fase0(k+1)+2;
-        end
-    end
-    Corr_fase2=Corr_fase0;
-   
-    
-    
-    Corr_fase(:,rep)=Corr_fase2;
-    clear cont
-    clear Corr_fase2
+% for k=1:size(Corr_fase2)-1;
+%     cambio=abs(Corr_fase2(k+1)-Corr_fase2(k));
+%     if cambio >0.4
+%         Corr_fase2(k+1)=Corr_fase2(k);
+% 
+%     end
+% end
+Corr_fase(:,rep)=Corr_fase2;
+clear cont
+clear Corr_fase2
 end
 
 delete(vid)
 
-%fase_prom=mean(Corr_fase,2);
-%fase_err=std(Corr_fase,0,2)/sqrt(Nmed);
-% figure;plot(NivelGris,Corr_fase(:,1),'r-*');
-%figure;errorbar(NivelGris,fase_prom,fase_err);
-%drawnow
+fase_prom=mean(Corr_fase,2);
 
-text_T=strcat('Bm = ',num2str(Brillo),'  Cm= ',num2str(Contraste),'  P= ',num2str(Pol), '  R1= ',num2str(R1),'  R2= ',num2str(R2),'  A: ',num2str(Ana),'  Ec: ',num2str(Exposurenro));
-text_x= 'Nivel de gris(8 bits [0 255])';
-text_y='Corrimiento de fase(rad [0 2*pi])';
+fase_err=std(Corr_fase,0,2)/sqrt(Nmed);
+  
+
+
+% figure;plot(NivelGris,Corr_fase(:,1),'r-*');
+
+figure;errorbar(NivelGris,fase_prom,fase_err);
+%drawnow
 
 xtic=0:15:255;
 xlab=0:15:255;
@@ -224,7 +219,8 @@ ylab=ylab';
 grid on;axis on;
 title(text_T,'FontWeight','bold','FontSize',10,'FontName','Arial');...
 xlabel(text_x,'FontSize',10);ylabel(text_y,'FontSize',10);
-box on;
+%get(gca);
+axis on;box on;
 set(gca,'XLimMode','manual');
 set(gca,'XLim',[0 255]);
 set(gca,'XTick',xtic);
