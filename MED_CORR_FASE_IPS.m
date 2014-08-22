@@ -108,14 +108,20 @@ figure;
 delete(vid)
 
 grayLevels=255:-5:0;
+
+% initialGuess can be a vector of phase shifts or a 
+% vector consisting of phase extracted with PCA
+% for the first case use: GetPhaseAIA_fromShifts
+%for the second use: GetPhaseAIA_fromPhase
+
 initialGuess = 0.1* (0:pi/(52 - 1):pi);
 maxIterations=50;
 precision=1e-5;
 %% Cálculo de los saltos de fase por medio del
 % algorítmo de phase shifting
 
-[wrappedPhase_ref, phaseShiftVector_ref, backgroundImage_ref, modulationImage_ref, backgroundVector_ref, modulationVector_ref, phaseShiftVectorHistory_ref] = GetPhaseAdvancedIterativeAlgorithm(array_out_ref, initialGuess, maxIterations, precision);
-[wrappedPhase_corr, phaseShiftVector_corr, backgroundImage_corr, modulationImage_corr, backgroundVector_corr, modulationVector_corr, phaseShiftVectorHistory_corr] = GetPhaseAdvancedIterativeAlgorithm(array_out_corr, initialGuess, maxIterations, precision);
+[wrappedPhase_ref, phaseShiftVector_ref, backgroundImage_ref, modulationImage_ref, backgroundVector_ref, modulationVector_ref, phaseShiftVectorHistory_ref] = GetPhaseAIA_fromShifts(array_out_ref, initialGuess, maxIterations, precision);
+[wrappedPhase_corr, phaseShiftVector_corr, backgroundImage_corr, modulationImage_corr, backgroundVector_corr, modulationVector_corr, phaseShiftVectorHistory_corr] = GetPhaseAIA_fromShifts(array_out_corr, initialGuess, maxIterations, precision);
 
 % el salto de fase puede resultar de la suma o 
 % o de la resta entre las fses de cada sección

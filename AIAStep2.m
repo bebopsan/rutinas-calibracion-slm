@@ -1,7 +1,8 @@
 
-function [phaseShifts, background, modulation] = AIAStep2(phase, phaseShifts,fringesVector)
+function [phaseShifts, background, modulation,A] = AIAStep2(phase, phaseShifts,fringesVector)
 
 nPhaseShifts = length(phaseShifts);
+%figure,imagesc(phase),colormap(gray);
 nPixels = size(fringesVector,1);
 A = zeros(3,3);
 B = zeros(nPhaseShifts,3);
