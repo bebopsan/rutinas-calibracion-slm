@@ -46,12 +46,12 @@ TMfil = 1080;
 
 %%These two lines must be uncommented when using Holoeye LC2002
 
-%tamH=800;
-%tamV=600; 
+tamH=800;
+tamV=600; 
 
 %These two lines must be uncommented when using Holoeye LC2012
-tamH=1024;
-tamV=768;
+%  tamH=1024;
+%  tamV=768;
 
 load ([camino,'coor_subima']);
 f1=coorsubima(1,1);f2=coorsubima(1,2); f3=coorsubima(1,3); f4=coorsubima(1,4);

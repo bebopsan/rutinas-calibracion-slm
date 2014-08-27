@@ -30,11 +30,15 @@ figure,
     %-----Variables inciales globales
     camino='C:\Users\franjas\Documents\rutinas-calibracion-slm\';
 
-    TMcol = 1920;
+TMcol = 1920;
 TMfil = 1080;
 
-tamH=1024;
-tamV=768;
+% tamH=1024;
+% tamV=768;
+
+tamH=800;
+tamV=600;
+
 vec_Int=zeros(52,1);
 NivelGris=zeros(52,1);
 % Carga de propiedades de la medida

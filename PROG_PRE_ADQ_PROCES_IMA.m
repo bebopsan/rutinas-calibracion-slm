@@ -61,8 +61,11 @@ clc
 TMcol = 1920;
 TMfil = 1080;
 
-tamH = 1024;
-tamV = 768;
+% tamH = 1024;
+% tamV = 768;
+
+tamH=800;
+tamV=600;
 
 figure(5);
         Tgca=[tamH tamV];
